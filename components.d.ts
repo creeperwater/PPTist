@@ -54,6 +54,7 @@ declare module 'vue' {
     'IIconParkOutline:code': typeof import('~icons/icon-park-outline/code')['default']
     'IIconParkOutline:command': typeof import('~icons/icon-park-outline/command')['default']
     'IIconParkOutline:comment': typeof import('~icons/icon-park-outline/comment')['default']
+    'IIconParkOutline:components': typeof import('~icons/icon-park-outline/components')['default']
     'IIconParkOutline:connection': typeof import('~icons/icon-park-outline/connection')['default']
     'IIconParkOutline:copy': typeof import('~icons/icon-park-outline/copy')['default']
     'IIconParkOutline:delete': typeof import('~icons/icon-park-outline/delete')['default']

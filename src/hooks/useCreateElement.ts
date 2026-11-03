@@ -2,10 +2,11 @@ import { storeToRefs } from 'pinia'
 import { nanoid } from 'nanoid'
 import { useMainStore, useSlidesStore } from '@/store'
 import { getImageSize } from '@/utils/image'
-import type { PPTLineElement, PPTElement, TableCell, TableCellStyle, PPTShapeElement, ChartType, PPTVideoElement, PPTAudioElement, LineBinding } from '@/types/slides'
+import type { PPTLineElement, PPTElement, TableCell, TableCellStyle, PPTShapeElement, ChartType, PPTVideoElement, PPTAudioElement, PPTWidgetElement, LineBinding, WidgetType } from '@/types/slides'
 import { type ShapePoolItem, SHAPE_PATH_FORMULAS } from '@/configs/shapes'
 import type { LinePoolItem } from '@/configs/lines'
 import { CHART_DEFAULT_DATA } from '@/configs/chart'
+import { getWidgetRegistration } from '@/widgets'
 import useHistorySnapshot from '@/hooks/useHistorySnapshot'
 
 interface CommonElementPosition {
@@ -319,6 +320,31 @@ export default () => {
     createElement(newElement)
   }
 
+  /**
+   * 创建组件元素
+   * @param widgetType 组件类型
+   */
+  const createWidgetElement = (widgetType: WidgetType) => {
+    const registration = getWidgetRegistration(widgetType)
+    if (!registration) return
+
+    const { width, height } = registration.defaultSize()
+
+    const newElement: PPTWidgetElement = {
+      type: 'widget',
+      id: nanoid(10),
+      widgetType,
+      data: registration.defaultData(),
+      left: (viewportSize.value - width) / 2,
+      top: (viewportSize.value * viewportRatio.value - height) / 2,
+      width,
+      height,
+      rotate: 0,
+      color: theme.value.fontColor,
+    }
+    createElement(newElement)
+  }
+
   return {
     createImageElement,
     createChartElement,
@@ -329,5 +355,6 @@ export default () => {
     createLatexElement,
     createVideoElement,
     createAudioElement,
+    createWidgetElement,
   }
 }

@@ -22,10 +22,10 @@
         @keydown.enter="$event => handleEnter($event)"
       />
       <div class="handlers">
-        <span class="handler" @click="number += step">
+        <span class="handler" @click="increase()">
           <svg fill="currentColor" width="1em" height="1em" viewBox="64 64 896 896"><path d="M890.5 755.3L537.9 269.2c-12.8-17.6-39-17.6-51.7 0L133.5 755.3A8 8 0 00140 768h75c5.1 0 9.9-2.5 12.9-6.6L512 369.8l284.1 391.6c3 4.1 7.8 6.6 12.9 6.6h75c6.5 0 10.3-7.4 6.5-12.7z"></path></svg>
         </span>
-        <span class="handler" @click="number -= step">
+        <span class="handler" @click="decrease()">
           <svg fill="currentColor" width="1em" height="1em" viewBox="64 64 896 896"><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg>
         </span>
       </div>
@@ -77,12 +77,20 @@ watch(() => props.value, () => {
 watch(number, () => {
   const value = +number.value
   if (isNaN(value)) return
-  else if (value > props.max) return
-  else if (value < props.min) return
 
-  number.value = value
+  // 钳制到 [min, max]，防止输入负数或超出上限（同时修正文本输入导致的字符串拼接）
+  const clamped = Math.min(props.max, Math.max(props.min, value))
+  number.value = clamped
   emit('update:value', number.value)
 })
+
+// 数值运算增减（避免文本输入后 string + number 拼接）
+const increase = () => {
+  number.value = (+number.value || 0) + props.step
+}
+const decrease = () => {
+  number.value = (+number.value || 0) - props.step
+}
 
 const checkAndEmitValue = () => {
   let value = +number.value

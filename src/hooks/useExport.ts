@@ -5,8 +5,9 @@ import pptxgen from 'pptxgenjs'
 import tinycolor from 'tinycolor2'
 import { toPng, toJpeg } from 'html-to-image'
 import { useSlidesStore } from '@/store'
-import type { PPTElementOutline, PPTElementShadow, PPTElementLink, Slide } from '@/types/slides'
+import type { PPTElementOutline, PPTElementShadow, PPTElementLink, Slide, WidgetTimerData, WidgetRollCallData } from '@/types/slides'
 import { getElementRange, getLineElementPath, getTableSubThemeColor } from '@/utils/element'
+import { formatTimerValue } from '@/widgets'
 import { type AST, toAST } from '@/utils/htmlParser'
 import { type SvgPoints, toPoints } from '@/utils/svgPathParser'
 import { encrypt } from '@/utils/crypto'
@@ -973,7 +974,42 @@ export default () => {
 
           pptxSlide.addImage(options)
         }
-        
+
+        else if (el.type === 'widget') {
+          // 组件元素导出为静态文本（PowerPoint 不支持自定义交互组件）
+          let text = ''
+          if (el.widgetType === 'timer') {
+            const data = el.data as WidgetTimerData
+            text = data.mode === 'countdown' ? formatTimerValue(data.duration) : '00:00'
+          }
+          else if (el.widgetType === 'rollCall') {
+            const data = el.data as WidgetRollCallData
+            text = `${data.rows}排${data.cols}列`
+          }
+
+          const options: pptxgen.TextPropsOptions = {
+            x: el.left / ratioPx2Inch.value,
+            y: el.top / ratioPx2Inch.value,
+            w: el.width / ratioPx2Inch.value,
+            h: el.height / ratioPx2Inch.value,
+            fontSize: el.height * 0.55 / ratioPx2Pt.value,
+            color: formatColor(el.color || '#000000').color,
+            bold: true,
+            align: 'center',
+            valign: 'middle',
+          }
+          if (el.rotate) options.rotate = el.rotate
+          if (el.fill) options.fill = { color: formatColor(el.fill).color }
+          if (el.outline) {
+            options.line = {
+              pt: (el.outline.width || 2) / ratioPx2Pt.value,
+              color: formatColor(el.outline.color || '#000000').color,
+            }
+          }
+
+          pptxSlide.addText(text, options)
+        }
+
         else if (!ignoreMedia && (el.type === 'video' || el.type === 'audio')) {
           const options: pptxgen.MediaProps = {
             x: el.left / ratioPx2Inch.value,

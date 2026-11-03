@@ -120,6 +120,9 @@
       <div class="insert-handler-item" :class="{ 'active': showSymbolPanel }" v-tooltip="'插入符号'" @click="toggleSymbolPanel()">
         <i-icon-park-outline:symbol class="icon" /> <span class="text">符号</span>
       </div>
+      <div class="insert-handler-item" v-tooltip="'插入组件'" @click="widgetCenterVisible = true">
+        <i-icon-park-outline:components class="icon" /> <span class="text">组件</span>
+      </div>
     </div>
 
     <div class="right-handler">
@@ -165,6 +168,16 @@
         @insert="path => insertSvgPath(path)"
       />
     </Modal>
+
+    <Modal
+      v-model:visible="widgetCenterVisible"
+      :width="880"
+      :closeButton="true"
+    >
+      <WidgetCenter
+        @select="type => { createWidgetElement(type); widgetCenterVisible = false }"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -186,6 +199,7 @@ import ChartPool from './ChartPool.vue'
 import TableGenerator from './TableGenerator.vue'
 import MediaInput from './MediaInput.vue'
 import SVGPathEditor from './SVGPathEditor.vue'
+import WidgetCenter from './WidgetCenter.vue'
 import LaTeXEditor from '@/components/LaTeXEditor/index.vue'
 import FileInput from '@/components/FileInput.vue'
 import Modal from '@/components/Modal.vue'
@@ -224,6 +238,7 @@ const {
   createVideoElement,
   createAudioElement,
   createShapeElement,
+  createWidgetElement,
 } = useCreateElement()
 
 const insertImageElement = (files: FileList) => {
@@ -239,6 +254,7 @@ const tableGeneratorVisible = ref(false)
 const mediaInputVisible = ref(false)
 const latexEditorVisible = ref(false)
 const svgPathEditorVisible = ref(false)
+const widgetCenterVisible = ref(false)
 const textTypeSelectVisible = ref(false)
 const shapeMenuVisible = ref(false)
 const imageMenuVisible = ref(false)

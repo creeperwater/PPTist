@@ -19,6 +19,7 @@ import TableStylePanel from './TableStylePanel.vue'
 import LatexStylePanel from './LatexStylePanel.vue'
 import VideoStylePanel from './VideoStylePanel.vue'
 import AudioStylePanel from './AudioStylePanel.vue'
+import WidgetStylePanel from './WidgetStylePanel.vue'
 
 const panelMap = {
   [ElementTypes.TEXT]: TextStylePanel,
@@ -30,6 +31,7 @@ const panelMap = {
   [ElementTypes.LATEX]: LatexStylePanel,
   [ElementTypes.VIDEO]: VideoStylePanel,
   [ElementTypes.AUDIO]: AudioStylePanel,
+  [ElementTypes.WIDGET]: WidgetStylePanel,
 }
 
 const { handleElement } = storeToRefs(useMainStore())

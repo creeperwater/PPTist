@@ -51,6 +51,7 @@ export const enum ElementTypes {
   LATEX = 'latex',
   VIDEO = 'video',
   AUDIO = 'audio',
+  WIDGET = 'widget',
 }
 
 /**
@@ -697,7 +698,72 @@ export interface PPTAudioElement extends PPTBaseElement {
 }
 
 
-export type PPTElement = PPTTextElement | PPTImageElement | PPTShapeElement | PPTLineElement | PPTChartElement | PPTTableElement | PPTLatexElement | PPTVideoElement | PPTAudioElement
+/**
+ * 组件类型
+ */
+export type WidgetType = 'timer' | 'rollCall'
+
+/**
+ * 计时器模式
+ * 
+ * countdown: 倒计时（从设置的时长向下走，到 0 停止）
+ * 
+ * stopwatch: 秒表（从 0 向上计时）
+ */
+export type TimerMode = 'countdown' | 'stopwatch'
+
+/**
+ * 计时器组件数据
+ * 
+ * mode: 计时模式
+ * 
+ * duration: 倒计时总秒数（仅倒计时模式使用）
+ */
+export interface WidgetTimerData {
+  mode: TimerMode
+  duration: number
+}
+
+/**
+ * 随机点名组件数据
+ * 
+ * rows: 教室排数（第一行即第一排）
+ * 
+ * cols: 教室列数
+ */
+export interface WidgetRollCallData {
+  rows: number
+  cols: number
+}
+
+export type WidgetData = WidgetTimerData | WidgetRollCallData
+
+/**
+ * 组件元素（交互控件）
+ * 
+ * type: 元素类型（widget）
+ * 
+ * widgetType: 组件类型（如计时器）
+ * 
+ * data: 组件数据（配置随 PPT 数据保存，放映时以此初始化）
+ * 
+ * color: 文字颜色
+ * 
+ * fill?: 填充色
+ * 
+ * outline?: 边框
+ */
+export interface PPTWidgetElement extends PPTBaseElement {
+  type: 'widget'
+  widgetType: WidgetType
+  data: WidgetData
+  color: string
+  fill?: string
+  outline?: PPTElementOutline
+}
+
+
+export type PPTElement = PPTTextElement | PPTImageElement | PPTShapeElement | PPTLineElement | PPTChartElement | PPTTableElement | PPTLatexElement | PPTVideoElement | PPTAudioElement | PPTWidgetElement
 
 export type AnimationType = 'in' | 'out' | 'attention'
 export type AnimationTrigger = 'click' | 'meantime' | 'auto'
