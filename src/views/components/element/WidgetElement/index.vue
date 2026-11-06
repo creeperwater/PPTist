@@ -16,8 +16,9 @@
         class="element-content"
         :style="{ backgroundColor: elementInfo.fill }"
         v-contextmenu="contextmenus"
-        @mousedown="$event => handleSelectElement($event)"
-        @touchstart="$event => handleSelectElement($event)"
+        @mousedown="$event => handleSelectElement($event, false)"
+        @touchstart="$event => handleSelectElement($event, false)"
+        @wheel.stop
       >
         <ElementOutline
           :width="elementInfo.width"
@@ -34,6 +35,12 @@
           :interactive="true"
           @interact="handleInteract"
         />
+
+        <!-- 参考文本框元素：内容区按下仅选中（让组件内部如 3D 旋转正常交互），靠近边界按下才拖动 -->
+        <div class="drag-handler top" @mousedown="$event => handleSelectElement($event)" @touchstart="$event => handleSelectElement($event)"></div>
+        <div class="drag-handler bottom" @mousedown="$event => handleSelectElement($event)" @touchstart="$event => handleSelectElement($event)"></div>
+        <div class="drag-handler left" @mousedown="$event => handleSelectElement($event)" @touchstart="$event => handleSelectElement($event)"></div>
+        <div class="drag-handler right" @mousedown="$event => handleSelectElement($event)" @touchstart="$event => handleSelectElement($event)"></div>
       </div>
     </div>
   </div>
@@ -83,6 +90,35 @@ const handleInteract = (e: MouseEvent | TouchEvent) => handleSelectElement(e, fa
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+.drag-handler {
+  position: absolute;
+  z-index: 1;
   cursor: move;
+
+  &.top {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+  }
+  &.bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+  }
+  &.left {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 10px;
+  }
+  &.right {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+  }
 }
 </style>

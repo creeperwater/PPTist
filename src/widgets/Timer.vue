@@ -188,7 +188,16 @@ onUnmounted(halt)
   align-items: stretch;
   overflow: hidden;
   background-color: $themeColor;
-  transition: width $transitionDelay;
+  transition: width $transitionDelay, filter .2s, transform .2s, box-shadow .2s;
+
+  &:hover {
+    filter: brightness(1.15);
+    transform: scale(1.06);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
 }
 .btn-action {
   flex: 1;
@@ -199,6 +208,7 @@ onUnmounted(halt)
   border: none;
   background: transparent;
   cursor: pointer;
+  transition: background-color .15s;
 
   svg {
     display: block;
@@ -206,13 +216,16 @@ onUnmounted(halt)
     fill: #fff;
   }
 }
-// 双按钮胶囊形态：两图标向中缝靠拢
+// 双按钮胶囊形态：两图标轻微向中缝靠拢，各自半区 hover 高亮以区分是暂停还是停止
 .control-btn.pill {
   .btn-action:first-child svg {
-    transform: translateX(35%);
+    transform: translateX(12%);
   }
   .btn-action:last-child svg {
-    transform: translateX(-35%);
+    transform: translateX(-12%);
+  }
+  .btn-action:hover {
+    background-color: rgba(255, 255, 255, 0.3);
   }
 }
 </style>

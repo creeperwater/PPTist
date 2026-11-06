@@ -5,7 +5,7 @@ import pptxgen from 'pptxgenjs'
 import tinycolor from 'tinycolor2'
 import { toPng, toJpeg } from 'html-to-image'
 import { useSlidesStore } from '@/store'
-import type { PPTElementOutline, PPTElementShadow, PPTElementLink, Slide, WidgetTimerData, WidgetRollCallData } from '@/types/slides'
+import type { PPTElementOutline, PPTElementShadow, PPTElementLink, Slide, WidgetTimerData, WidgetRollCallData, WidgetFunctionData } from '@/types/slides'
 import { getElementRange, getLineElementPath, getTableSubThemeColor } from '@/utils/element'
 import { formatTimerValue } from '@/widgets'
 import { type AST, toAST } from '@/utils/htmlParser'
@@ -985,6 +985,10 @@ export default () => {
           else if (el.widgetType === 'rollCall') {
             const data = el.data as WidgetRollCallData
             text = `${data.rows}排${data.cols}列`
+          }
+          else if (el.widgetType === 'function') {
+            const data = el.data as WidgetFunctionData
+            text = data.expressions.map(expr => expr.trim()).filter(expr => !!expr).join('\n')
           }
 
           const options: pptxgen.TextPropsOptions = {

@@ -15,12 +15,7 @@
             class="preview-box"
             :style="{ width: PREVIEW_WIDTH + 'px', height: PREVIEW_HEIGHT + 'px' }"
           >
-            <component
-              :is="widget.component"
-              :data="widget.defaultData()"
-              :width="PREVIEW_WIDTH"
-              :height="PREVIEW_HEIGHT"
-            />
+            <img class="preview-img" :src="widget.preview" :alt="widget.name" draggable="false" />
           </div>
         </div>
         <div class="info">
@@ -88,6 +83,13 @@ const emit = defineEmits<{
 
     .preview-box {
       overflow: hidden;
+
+      .preview-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
   }
 

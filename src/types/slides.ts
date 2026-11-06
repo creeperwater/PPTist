@@ -701,7 +701,7 @@ export interface PPTAudioElement extends PPTBaseElement {
 /**
  * 组件类型
  */
-export type WidgetType = 'timer' | 'rollCall'
+export type WidgetType = 'timer' | 'rollCall' | 'function'
 
 /**
  * 计时器模式
@@ -736,7 +736,24 @@ export interface WidgetRollCallData {
   cols: number
 }
 
-export type WidgetData = WidgetTimerData | WidgetRollCallData
+/**
+ * 函数组件数据
+ *
+ * expressions: 表达式列表（每条一个函数，涉及 1 个自变量绘二维曲线、2 个绘三维曲面）
+ *
+ * varRanges: 自变量 x/y/z 的取值范围
+ */
+export interface WidgetFunctionData {
+  expressions: string[]
+  varRanges: { x: VarRange; y: VarRange; z: VarRange }
+}
+
+export interface VarRange {
+  min: number
+  max: number
+}
+
+export type WidgetData = WidgetTimerData | WidgetRollCallData | WidgetFunctionData
 
 /**
  * 组件元素（交互控件）

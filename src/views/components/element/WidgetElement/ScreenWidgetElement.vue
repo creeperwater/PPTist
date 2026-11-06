@@ -11,7 +11,7 @@
       class="rotate-wrapper"
       :style="{ transform: `rotate(${elementInfo.rotate}deg)` }"
     >
-      <div class="element-content" :style="{ backgroundColor: elementInfo.fill }">
+      <div class="element-content" :style="{ backgroundColor: elementInfo.fill }" @wheel.stop>
         <ElementOutline
           :width="elementInfo.width"
           :height="elementInfo.height"

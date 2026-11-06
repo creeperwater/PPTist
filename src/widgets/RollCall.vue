@@ -176,6 +176,7 @@ onUnmounted(resetState)
 .seat {
   background-color: #e2e4e8;
   border-radius: 2px;
+  cursor: pointer;
 
   &.lit {
     background-color: $themeColor;
@@ -200,6 +201,16 @@ onUnmounted(resetState)
   border: none;
   background-color: $themeColor;
   cursor: pointer;
+  transition: filter .2s, transform .2s, box-shadow .2s;
+
+  &:hover {
+    filter: brightness(1.15);
+    transform: scale(1.06);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
 
   svg {
     display: block;
