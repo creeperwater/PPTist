@@ -24,6 +24,7 @@
           :height="elementInfo.height"
           :color="elementInfo.color"
           :fill="elementInfo.fill"
+          :interactive="interactive"
         />
       </div>
     </div>
@@ -37,9 +38,13 @@ import { getWidgetRegistration } from '@/widgets'
 
 import ElementOutline from '@/views/components/element/ElementOutline.vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   elementInfo: PPTWidgetElement
-}>()
+  // 是否可交互（缩略图默认不可交互；移动端播放模式等场景传 true，组件按钮可点击）
+  interactive?: boolean
+}>(), {
+  interactive: false,
+})
 
 const widgetComponent = computed(() => getWidgetRegistration(props.elementInfo.widgetType)?.component || null)
 </script>

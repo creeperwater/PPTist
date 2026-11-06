@@ -246,12 +246,14 @@ export default () => {
   const touchEndListener = (e: TouchEvent) => {
     if (!touchInfo.value) return
 
-    const offsetX = Math.abs(touchInfo.value.x - e.changedTouches[0].pageX)
-    const offsetY = e.changedTouches[0].pageY - touchInfo.value.y
+    // 无论本次是否为翻页手势，都清空触摸起点，避免残留坐标与后续点击（如组件按钮）组合成误翻页
+    const start = touchInfo.value
+    touchInfo.value = null
+
+    const offsetX = Math.abs(start.x - e.changedTouches[0].pageX)
+    const offsetY = e.changedTouches[0].pageY - start.y
 
     if ( Math.abs(offsetY) > offsetX && Math.abs(offsetY) > 50 ) {
-      touchInfo.value = null
-
       if (offsetY > 0) execPrev()
       else execNext()
     }

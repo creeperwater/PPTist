@@ -36,9 +36,10 @@
           }"
           v-if="Math.abs(slideIndex - index) < 2"
         >
-          <ThumbnailSlide 
-            :slide="slide" 
-            :size="slideSize.width" 
+          <ThumbnailSlide
+            :slide="slide"
+            :size="slideSize.width"
+            :interactive="true"
           />
         </div>
       </div>
@@ -116,8 +117,12 @@ const touchStartListener = (e: TouchEvent) => {
 const touchEndListener = (e: TouchEvent) => {
   if (!touchInfo.value) return
 
-  const offsetX = e.changedTouches[0].pageX - touchInfo.value.x
-  const offsetY = e.changedTouches[0].pageY - touchInfo.value.y
+  // 无论本次是否为翻页手势，都清空触摸起点，避免残留坐标与后续点击（如组件按钮）组合成误翻页
+  const start = touchInfo.value
+  touchInfo.value = null
+
+  const offsetX = e.changedTouches[0].pageX - start.x
+  const offsetY = e.changedTouches[0].pageY - start.y
   const offsetAbsX = Math.abs(offsetX)
   const offsetAbsY = Math.abs(offsetY)
 

@@ -9,6 +9,7 @@
     <component
       :is="currentElementComponent"
       :elementInfo="elementInfo"
+      :interactive="interactive"
       target="thumbnail"
     ></component>
   </div>
@@ -29,10 +30,14 @@ import BaseVideoElement from '@/views/components/element/VideoElement/BaseVideoE
 import BaseAudioElement from '@/views/components/element/AudioElement/BaseAudioElement.vue'
 import BaseWidgetElement from '@/views/components/element/WidgetElement/BaseWidgetElement.vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   elementInfo: PPTElement
   elementIndex: number
-}>()
+  // 是否可交互（默认不可交互；移动端播放模式等场景传 true，组件按钮可点击）
+  interactive?: boolean
+}>(), {
+  interactive: false,
+})
 
 const currentElementComponent = computed<unknown>(() => {
   const elementTypeMap = {

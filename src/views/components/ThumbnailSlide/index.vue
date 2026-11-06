@@ -20,6 +20,7 @@
         :key="element.id"
         :elementInfo="element"
         :elementIndex="index + 1"
+        :interactive="interactive"
       />
     </div>
     <div class="placeholder" v-else>加载中 ...</div>
@@ -40,8 +41,11 @@ const props = withDefaults(defineProps<{
   slide: Slide
   size: number
   visible?: boolean
+  // 是否可交互（默认不可交互；移动端播放模式等场景传 true，组件按钮可点击）
+  interactive?: boolean
 }>(), {
   visible: true,
+  interactive: false,
 })
 
 const { viewportRatio, viewportSize } = storeToRefs(useSlidesStore())
